@@ -1,5 +1,7 @@
- function getRandomInt(max) {
-    return Math.floor(Math.random() * max).toString();
-  }
+const queryString = window.location.search;
+console.log(queryString);
+const urlParams = new URLSearchParams(queryString)
 
-console.log(getRandomInt(2))
+const user = urlParams.get('user')
+
+console.log(`user ${user}`)

@@ -1,5 +1,14 @@
 import AgoraRTC from "agora-rtc-sdk-ng";
-import {v4 as uuidv4} from 'uuid'
+import { v4 as uuidv4 } from 'uuid'
+
+function getUser() {
+    const queryString = window.location.search;
+    console.log(queryString);
+    const urlParams = new URLSearchParams(queryString)
+
+ const user = urlParams.get('user')
+ return user
+}
 
 let rtc = {
     localAudioTrack: null,
@@ -13,13 +22,15 @@ let options = {
     // Set the channel name.
     channel: "test",
     // Use a temp token
-    token:'007eJxTYHA7UpJ961Xzxt1f5maUWYZIK519HfS1nPFyva1+wXTZKHcFBiOTJLMUEzNTyzSjZJM001SLVIO0FPNECwMT47TENAPLbf9fpDUEMjJMv9/EzMgAgSA+C0NJanEJAwMArFkhdw==',
+    token: '007eJxTYHA7UpJ961Xzxt1f5maUWYZIK519HfS1nPFyva1+wXTZKHcFBiOTJLMUEzNTyzSjZJM001SLVIO0FPNECwMT47TENAPLbf9fpDUEMjJMv9/EzMgAgSA+C0NJanEJAwMArFkhdw==',
     // Set the user ID.
-    uid: uuidv4(),
+    uid: getUser(),
 };
+
+
 async function startBasicCall() {
     // Create an AgoraRTCClient object.
-    rtc.client = AgoraRTC.createClient({mode: "rtc", codec: "vp8"});
+    rtc.client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
 
     // Listen for the "user-published" event, from which you can get an AgoraRTCRemoteUser object.
     rtc.client.on("user-published", async (user, mediaType) => {
@@ -108,7 +119,32 @@ async function startBasicCall() {
             // Leave the channel.
             await rtc.client.leave();
         };
+        document.getElementById('mute').onclick = async function (){
+            console.log('set mute')
+            rtc.localAudioTrack.setMuted(true)
+        }
+        document.getElementById('unmute').onclick = async function (){
+            console.log('set unmute')
+            rtc.localAudioTrack.setMuted(false)
+        }
     };
 }
 
+// function muteUser(){
+//     console.log('set mute')
+//     rtc.localAudioTrack.setMuted(true)
+
+// }
+// function unMuteUser(){
+//     console.log('set unmute')
+//     rtc.localAudioTrack.setMuted(false)
+// }
+
+// async function basicMute(){
+//     const muteBtn = document.getElementById('mute')
+//     const unMuteBtn = document.getElementById('unmute')
+//     muteBtn.addEventListener('click',rtc.localAudioTrack.setMuted(true))
+//     unMuteBtn.addEventListener('click',rtc.localAudioTrack.setMuted(false))
+// }
 startBasicCall();
+// basicMute()
